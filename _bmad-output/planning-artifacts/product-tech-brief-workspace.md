@@ -77,7 +77,8 @@ This project answers that question empirically using the Elasticsearch LTR plugi
 │  - Train LLM on Home Depot assessor instructions             │
 │  - Generate labels for expanded document set                 │
 │  - Measure consistency with human labels                     │
-│  - Retrain LTR on: (a) LLM-only, (b) combined datasets      │
+│  - Fine-tune vectors on: (a) LLM-only, (b) combined datasets │
+│  - Retrain LTR on: (a) LLM-only, (b) combined datasets       │
 │  - Double document count; repeat (a) and (b)                 │
 └─────────────────────┬───────────────────────────────────────┘
                       │
@@ -165,7 +166,7 @@ Multiple BM25 query variants (e.g., multi-match, cross-fields, best-fields) to e
 1. Fine-tune an LLM on the Home Depot assessor instructions
 2. Apply LLM to label additional documents
 3. Measure consistency: agreement rate between LLM labels and human labels on held-out annotated examples
-4. Retrain latest LTR model on three configurations:
+4. Fine-tune the vectors, and retrain latest LTR model on two extra configurations:
    - LLM-generated labels only
    - Combined human + LLM labels
 5. Double the number of documents; repeat both retraining configurations
@@ -182,9 +183,9 @@ The full pipeline (indexing → evaluation → fusion → LTR → fine-tuning) i
 | Search engine | Elasticsearch |
 | LTR plugin | Elasticsearch LTR plugin (feature logging + model scoring) |
 | Embedding inference | sentence-transformers, HuggingFace Transformers |
-| LTR training | XGBoost, scikit-learn (Rank SVM) |
+| LTR training | XGBoost, scikit-learn (Implement Rank SVM) |
 | Fine-tuning | HuggingFace Trainer / sentence-transformers training API |
-| LLM augmentation | LLM of choice (GPT-4 class or open-weight equivalent) |
+| LLM augmentation | LLM of choice (GPT-5.4 class or open-weight equivalent) |
 | Evaluation | Custom metrics + established LTR evaluation libraries |
 
 ## Deliverables
@@ -193,6 +194,6 @@ The full pipeline (indexing → evaluation → fusion → LTR → fine-tuning) i
 2. Per-model, per-field evaluation report (NDCG, pair accuracy)
 3. Trained and evaluated LTR models (XGBoost, Rank SVM) with feature importance analysis
 4. Fine-tuned embedding model with hard negative analysis
-5. LLM augmentation consistency report + LTR retrain comparison
-6. Cross-dataset replication results
+5. LLM augmentation consistency report + Additonal Fine-Tuning + LTR retrain comparison
+6. Cross-dataset evaluation results, conclusion regarding which embeddings worked the best
 7. Metric-driven guidance: which models to use, how to combine signals, what fine-tuning and LLM augmentation buy — for teams starting search from zero
