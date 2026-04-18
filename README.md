@@ -3,7 +3,7 @@
 ## Project description
 ### Intro
 
-Search is a major part of every successful product that drives revenue, but at the beginning of every project, engineers don’t have any click dataset to train the model, and the approach with assessors requires time and constant updates to the control questions to ensure assessors do their job correctly.
+Search is a major part of every successful product, and the main revenue driver, but at the beginning of every project, engineers don’t have any click dataset to train the model, and the approach with assessors requires time and constant updates to the control questions to ensure assessors do their job correctly.
 
 ### Goal
 
