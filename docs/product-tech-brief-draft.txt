@@ -1,0 +1,23 @@
+Search is a major part of every successful product that drives revenue, but at the beginning of every project, engineers don’t have any click dataset to train the model, and the approach with assessors requires time and constant updates to the control questions to ensure assessors do their job correctly.
+
+
+
+The goal of this project is to use multiple datasets with labelled data and develop an embeddings-based LTR model to provide guidance on building a high-quality search based on vector-space models when we don’t have any labelled data and need to optimise the search algorithm.
+
+There are two existing learning-to-rank datasets with human-annotated query-document pairs. The first dataset is a Home Depot dataset. Every document in the first dataset consists of multiple fields, including title, description, brand name, product category, colour, and product-specific fields. The first step is to create an Elasticsearch schema with common fields such as title, description, brand name, product category, colour, and identify additional common fields. Store other fields as an array of  strings to simplify the schema. Also, upload sentence embeddings for models available in the sentence embeddings package, and other models that provide sentence embeddings, and are available in      HuggingFace or other resources.
+
+
+
+Split the dataset into a train-test-evaluation subset based on queries. Research other split strategies and optimal ratios. Use the Elasticsearch LTR plugin to compute cosine similarities. Evaluate the performance of sentence embeddings on every dataset based on  query to document field similarity for every model, and every field in terms of NDCG, and pair accuracy. Do research on state-of-the-art LTR evaluation methods and add them to the set of metrics used for LTR evaluation.  Use a bunch of different BM25 similarity queries to establish a baseline. Use Reciprocal Rank Fusion and Weighted Reciprocal Fusion to combine similarity scores. Generate weights based only on evaluation scores in the training dataset. Train an LTR model based on available similarity signals. Evaluated the trained LTR models in terms of LTR metrics, and analysed the final model based on loss-based and prediction-value-change feature importance. Fine-tune at least one sentence embedding model, analyse the impact of hard negatives, evaluate the results, add the new model as a feature to the LTR model, and repeat training and evaluation. Use at least two LTR models: xgboost, and rank SVM.
+
+
+
+The Home Depot dataset contains instructions for assessors who labelled the data. Use the provided instructions to train the LLM to expand the dataset and measure its consistency with human-provided labels, and use the following approaches:
+
+1. Use the LLM-based dataset to retrain the latest LTR model.
+2. Use the combination of datasets to retrain the latest LTR model.
+3. Double the number of documents for the evaluation, and repeat steps (1) and (2).
+
+
+
+The next stage is to find a new dataset and reuse the developed pipeline, and provide the comparison results. In conclusion, provide metric-driven guidance on what can be done without pre-existing labelled data and which models offer the best balance of speed and performance.
