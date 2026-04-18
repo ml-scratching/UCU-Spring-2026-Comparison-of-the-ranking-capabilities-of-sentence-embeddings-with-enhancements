@@ -14,10 +14,11 @@ This document defines the requirements for a course work project that builds and
 
 ## Goals
 
-1. Evaluate sentence embedding models empirically across document fields and datasets
+1. Evaluate sentence embedding models based on user-provided labels across document fields and datasets
 2. Build, train, and evaluate LTR models on the resulting similarity features
-3. Measure the impact of embedding fine-tuning and LLM-based data augmentation on LTR quality
-4. Validate the pipeline on a second dataset and produce actionable guidance
+3. Fine-tune sentence embeddings, and evaluate the role of negative samplping strategies
+4. Measure the impact of embedding fine-tuning and LLM-based data generation on LTR quality
+5. Validate the pipeline on a second dataset and produce actionable guidance regarding which embeddings are the best, and the role of fine-tuning.
 
 ## Non-Goals
 
@@ -25,6 +26,9 @@ This document defines the requirements for a course work project that builds and
 - Multi-language or cross-lingual evaluation
 - Building a user-facing search interface
 - Custom Elasticsearch plugin development
+- Candidate-generation algorithm for search
+- Performance optimizations
+
 
 ---
 
@@ -38,7 +42,8 @@ This document defines the requirements for a course work project that builds and
 
 **Acceptance Criteria:**
 - Schema explicitly maps: `title`, `description`, `brand_name`, `product_category`, `colour`
-- Additional product-specific fields stored as `Array<String>` under a single `extra_fields` field
+- Additional product-specific fields stored as `Array<String>` under a single `extra_fields` fields
+- Optional additiona fields
 - Schema is documented and version-controlled
 - Index can be rebuilt deterministically from the raw dataset
 
@@ -87,7 +92,6 @@ This document defines the requirements for a course work project that builds and
 - Cosine similarity computed for every (model, field) combination using the Elasticsearch LTR plugin
 - NDCG@k and pair accuracy reported for every (model, field) combination on the test set
 - Results presented in a comparison matrix
-- State-of-the-art LTR evaluation metrics (identified via literature review) added to the metric set and reported
 
 ---
 
@@ -112,7 +116,7 @@ This document defines the requirements for a course work project that builds and
 - Weights derived exclusively from evaluation scores on the training split (no test/eval leakage)
 - Weighted RRF evaluated on the test set
 - Weight derivation methodology documented
-- Comparison between unweighted RRF and weighted RRF reported
+- Metric-based comparison between unweighted RRF and weighted RRF reported
 
 ---
 
@@ -207,17 +211,16 @@ This document defines the requirements for a course work project that builds and
 - Agreement rate (and optionally Cohen's kappa) between LLM and human labels reported
 - Systematic disagreement patterns identified and discussed
 
-### Story 6.3 — LTR Retraining on Augmented Dataset
+### Story 6.3 — LTR Retraining and Vector-space model fine-tuning on Augmented Dataset
 
 **As a** researcher, **I want** the LTR model retrained under multiple augmentation configurations **so that** I can measure the effect of LLM-augmented data on ranking quality.
 
 **Acceptance Criteria:**
-- Configuration A: LTR retrained on LLM-generated labels only
-- Configuration B: LTR retrained on combined human + LLM labels
+- Configuration A: LTR retrained, vector-space model fine-tune on LLM-generated labels only 
+- Configuration B: LTR retrained vector-space model fine-tune on combined human + LLM labels
 - Document count doubled; configurations A and B repeated on the larger dataset
 - All four configurations evaluated on the evaluation split
-- Results compared against human-labels-only baseline
-
+- Results compared against all previous models
 ---
 
 ## Epic 7: Pipeline Replication on Second Dataset
@@ -231,7 +234,7 @@ This document defines the requirements for a course work project that builds and
 **Acceptance Criteria:**
 - Dataset has human-annotated query-document pairs
 - Dataset is sufficiently large for train/test/eval splitting
-- Elasticsearch index created using the same pipeline as Dataset 1
+- Elasticsearch index created using the same pipeline as Dataset 1, but with the required adjustments
 
 ### Story 7.2 — Full Pipeline Execution on Second Dataset
 
@@ -265,7 +268,6 @@ This document defines the requirements for a course work project that builds and
 |---|---|
 | NDCG@k | All evaluation stages |
 | Pair accuracy | All evaluation stages |
-| State-of-the-art LTR metrics (TBD from literature) | All LTR evaluation stages |
 | LLM-human label agreement rate | Epic 6 only |
 | Feature importance scores | LTR analysis (Epic 4, 5) |
 
@@ -282,4 +284,5 @@ This document defines the requirements for a course work project that builds and
 1. Which second dataset will be used? (Selection affects Epic 7 scope)
 2. What LLM will be used for dataset augmentation? (Affects consistency measurement approach)
 3. What are the target split ratios? (Research required in Story 1.3)
-4. Which state-of-the-art LTR metrics should be added? (Literature review required before Epic 2)
+4. That are the optimal parameters for the gradient boosting.
+5. How to sample hard? Is it possible to use the LTR model to improve the vector-space embeddings?

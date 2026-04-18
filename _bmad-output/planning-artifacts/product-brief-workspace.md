@@ -10,7 +10,7 @@ inputs: ["docs/poduct-tech-brief-draft.txt"]
 
 ## Executive Summary
 
-Every search product starts with the same unsolvable paradox: you need user click data to train a ranking model, but you need a good ranking model to generate meaningful clicks. Hiring human assessors sidesteps this — but it is slow, expensive, and requires constant maintenance to stay honest. This project cuts through that deadlock by repurposing existing, human-annotated Learning-to-Rank (LTR) datasets as a proxy for ground truth, systematically evaluating sentence embedding models across the full ranking stack, and producing metric-driven guidance that teams can act on from day one.
+Every search product starts with the same unsolvable paradox: you need user click data to train a ranking model, but you need a good ranking model to generate meaningful clicks. Hiring human assessors sidesteps this — but it is slow, expensive, and requires constant surveillance. This project cuts through that deadlock by repurposing existing, human-annotated Learning-to-Rank (LTR) datasets as a proxy for ground truth, systematically evaluating sentence embedding models across the full ranking stack, and producing metric-driven guidance that teams can act on from day one.
 
 The result is a reusable benchmarking pipeline — built on Elasticsearch, sentence-transformers, and LTR tooling — that tells engineers *which* embedding models perform best, *how* to combine signals, and *what* improvements fine-tuning and LLM-augmented labeling actually buy. Rather than making arbitrary model choices at project launch, teams get an empirical foundation.
 
@@ -32,8 +32,8 @@ This project builds a full evaluation pipeline anchored to two human-annotated L
 3. Establishes a BM25 baseline and applies Reciprocal Rank Fusion (RRF) and Weighted RRF to combine signals
 4. Trains LTR models (XGBoost, Rank SVM) on the combined similarity features
 5. Fine-tunes the best candidate embedding model, analyzes the impact of hard negatives, and re-evaluates
-6. Expands the labeled dataset using an LLM trained on the original assessor instructions, measuring consistency with human labels
-7. Replays the full pipeline on a second dataset to validate generalizability
+6. Expands the labeled dataset using an LLM applied using original assessor instructions, measuring consistency with human labels
+7. Replays the full pipeline on a second dataset to validate generalizability, potentially requires to come up with your own instructions for LLM-based labeling.
 
 The output is not just a trained model — it is a set of concrete, metric-backed recommendations for building search without pre-existing labeled data.
 
@@ -42,7 +42,7 @@ The output is not just a trained model — it is a set of concrete, metric-backe
 - **Empirical over opinionated** — every recommendation is backed by NDCG and LTR metrics, not vendor benchmarks or intuition
 - **Full-stack coverage** — from BM25 baseline through fusion strategies, LTR training, embedding fine-tuning, and LLM data augmentation
 - **LLM-augmented labeling** — uses the original assessor instructions to extend the dataset systematically, with consistency measurement against human labels
-- **Validated on two datasets** — findings are not an artifact of one domain; the pipeline is replicated to test generalizability
+- **Validated on two+ datasets** — findings are not an artifact of one domain; the pipeline is replicated to test generalizability
 - **Actionable guidance** — the final deliverable is a practical decision framework, not just experimental results
 
 ## Who This Serves
@@ -57,9 +57,10 @@ The output is not just a trained model — it is a set of concrete, metric-backe
 |---|---|
 | Embedding comparison complete | NDCG and pair accuracy reported for all models × all fields |
 | Baseline established | BM25 variants evaluated; RRF and Weighted RRF fusion applied |
-| LTR models trained and evaluated | XGBoost and Rank SVM both trained, evaluated, and analyzed for feature importance |
+| LTR models trained and evaluated | XGBoost and Rank SVM both trained, evaluated, and analyzed for feature importance based on previously extracted and evaluated features |
 | Fine-tuning impact measured | Fine-tuned model evaluated against off-the-shelf; hard negative analysis complete |
-| LLM augmentation validated | Consistency between LLM-generated and human labels measured; LTR retrained on augmented data |
+| The fine-tuning impact on LTR measured | Fine-tuned model added to the featureset, and the LTR is retrained and evaluated |
+| LLM augmentation validated | Consistency between LLM-generated and human labels measured; LTR retrained on augmented data; fine-tuning repeated; |
 | Pipeline replicated | Full pipeline run on second dataset; cross-dataset comparison documented |
 | Guidance delivered | Metric-driven recommendations published covering model selection and strategy |
 
