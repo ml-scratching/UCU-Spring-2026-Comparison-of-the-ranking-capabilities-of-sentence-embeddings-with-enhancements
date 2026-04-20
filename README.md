@@ -34,3 +34,4 @@ The next stage is to find two additional datasets, reuse the developed pipeline,
 - [Improving Pinterest Search Relevance Using Large Language Models](https://arxiv.org/html/2410.17152v1)
 - [Training and Finetuning Embedding Models with Sentence Transformers](https://huggingface.co/blog/train-sentence-transformers)
 - [Learning to Rank ES Plugin](https://elasticsearch-learning-to-rank.readthedocs.io/en/latest/)
+- [Homedpot Dataset](https://www.kaggle.com/datasets/thedevastator/the-home-depot-products-dataset)
